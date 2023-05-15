@@ -36,10 +36,13 @@ function onInputSearch(event) {
   });
 }
 
+///Функція для специфічного імені країни тобто якої не існую вказую на помилку користувачу
 function tooManyMatchesFound(){
   Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
 }
 
+
+// Функія для поточної країни
 function renderCountryCard(data){
   countryInfo.innerHTML = '';
   countryList.innerHTML = data
@@ -53,6 +56,7 @@ function renderCountryCard(data){
     .join('');
 }
 
+// Функія для листа запропонаваних країн які починаються на набрані букви
 function renderCountryList(data){
   countryInfo.innerHTML = '';
   countryList.innerHTML = data
