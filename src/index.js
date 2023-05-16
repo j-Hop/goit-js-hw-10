@@ -15,25 +15,36 @@ const enterIn = document.querySelector("input#search-box");
 enterIn.addEventListener("input", debounce(onInputSearch, DEBOUNCE_DELAY));
 
 function onInputSearch(event) {
-  if(event.target.value.trim() === ''){
-    countryInfo.innerHTML = '';
-    countryList.innerHTML = '';
+
+  const info = event.target.value.trim();
+
+  if(info === ''){
+    onInfo();
+    onList();
     return;
   }
 
-  fetchCountries(event.target.value.trim())
+  fetchCountries(info)
   .then(data => {
     if(data.length > 10){
       tooManyMatchesFound();
     } else if(data.length === 1){
       renderCountryCard(data);
     } else if(data.length >= 2 && data.length <= 10){
-      renderCountryList(data);
+      renderCountryCard(data);
     }
   })
   .catch(error => {
-    Notiflix.Notify.faifure('Oops, there is no country with that name!');
+    Notiflix.Notify.info('Oops, there is no country with that name!');
   });
+}
+
+function onInfo(){
+  countryInfo.innerHTML = '';
+}
+
+function onList(){
+  countryList.innerHTML = '';
 }
 
 ///Функція для специфічного імені країни тобто якої не існую вказую на помилку користувачу
@@ -44,7 +55,7 @@ function tooManyMatchesFound(){
 
 // Функія для поточної країни
 function renderCountryCard(data){
-  countryInfo.innerHTML = '';
+    onInfo();
   countryList.innerHTML = data
   .map(({name, flags, capital, population, languages}) => {
     return `<img src="${flags.svg}" alt="${flags.alt}" width="100"/>
@@ -56,14 +67,5 @@ function renderCountryCard(data){
     .join('');
 }
 
-// Функія для листа запропонаваних країн які починаються на набрані букви
-function renderCountryList(data){
-  countryInfo.innerHTML = '';
-  countryList.innerHTML = data
-  .map(({flags, name}) => {
-    `<li class="list-item"><img src="${flags.svg}" alt="${flags.alt}" width="100"/>
-    <h2> ${name.common}, (${name.official})</h2></li>`;
-  })
-  .join('');
-}
+
 
